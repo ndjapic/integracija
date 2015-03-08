@@ -53,27 +53,39 @@
 
     points = points.map(point)
     var A = points.shift()
-  
+    var B = points[points.length - 1]
+    var dx = B.x-A.x
+    var miny = points.reduce(
+     function(total, B){
+      return Math.min(total, B.y)
+     }, A.y
+    )
+    var maxy = points.reduce(
+     function(total, B){
+      return Math.max(total, B.y)
+     }, A.y
+    )
+    var dy = B.y-A.y
+    var ady = Math.abs(dy)
+    var n = dx*(maxy-miny)/eps
+    var zoom = 70*Math.log(n)
+
+    var canvas = document.getElementById('tutorial');
+    canvas.width = dx*zoom
+    canvas.height = (maxy-miny)*zoom
+    if (canvas.getContext){
+     var ctx = canvas.getContext('2d');
+     ctx.translate(0,canvas.height)
+     ctx.scale(zoom,-zoom) // repairs wrong orientation of y axis
+     ctx.translate(-A.x, -miny) // put origin at A
+     ctx.lineWidth = 1/zoom
+    }
+
     return points.reduce(
      function(total, B){
-      var dx = B.x-A.x
-      var dy = B.y-A.y
-      var ady = Math.abs(dy)
-      var n = dx*ady/eps
-      var zoom = 70*Math.log(n)
-
-      var canvas = document.getElementById('tutorial');
-      canvas.width = dx*zoom
-      canvas.height = ady*zoom
-      if (canvas.getContext){
-       var ctx = canvas.getContext('2d');
-       ctx.translate(0,canvas.height)
-       ctx.scale(zoom,-zoom) // repairs wrong orientation of y axis
-       ctx.translate(-A.x,-A.y) // put origin at A
-       ctx.lineWidth = 1/zoom
-      }
+      total += area(A,B, B.x-A.x, eps)
       A = B
-      return total + area(A,B, dx, eps)
+      return total
      }, 0
     );
    }
