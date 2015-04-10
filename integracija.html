@@ -49,7 +49,7 @@
      return Math.abs(B.y-A.y) < eps/h ?
       (A.y+4*C.y+B.y)*h/3 :
       area(A,C,h,eps) + area(C,B,h,eps)
-        } // End of area 
+    } // End of area 
 
     points = points.map(point)
     var A = points.shift()
@@ -90,7 +90,7 @@
     );
    } // End of defint
 
-     } // End of Fun
+  } // End of Fun
 
   function update(q) {
    q.integral.value = new Fun(
@@ -100,7 +100,7 @@
     Number(q.precision.value)
    )
    return false
-     } // End of update
+  } // End of update
 
  </script>
 
